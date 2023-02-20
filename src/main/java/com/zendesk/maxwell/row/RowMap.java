@@ -263,7 +263,27 @@ public class RowMap implements Serializable {
 
 		return json.consume();
 	}
+	
+	public String toJSONClickhouse(MaxwellOutputConfig outputConfig) throws Exception {
 
+
+		MaxwellJson json = MaxwellJson.getInstance();
+		JsonGenerator g = json.reset();
+
+		g.writeStartObject(); // start of row {
+
+		// _version
+		g.writeNumberField("_version", this.timestampSeconds);
+
+		for(Map.Entry<String, Object> entry : this.data.entrySet()) {
+			MaxwellJson.writeValueToJSON(g, outputConfig.includesNulls, entry.getKey(), entry.getValue());
+		}
+
+		g.writeEndObject(); // end of row
+
+		return json.consume();
+	}
+	
 	public Object getData(String key) {
 		return this.data.get(key);
 	}
