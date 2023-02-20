@@ -266,7 +266,7 @@ class MaxwellKafkaProducerWorker extends AbstractAsyncProducer implements Runnab
 
 	ProducerRecord<String, String> makeProducerRecord(final RowMap r) throws Exception {
 		String key = r.pkToJson(keyFormat);
-		String value = r.toJSON(outputConfig);
+		String value = r.toJSONClickhouse(outputConfig);
 		ProducerRecord<String, String> record;
 		if (r instanceof DDLMap) {
 			record = new ProducerRecord<>(this.ddlTopic, this.ddlPartitioner.kafkaPartition(r, getNumPartitions(this.ddlTopic)), key, value);
